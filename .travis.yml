@@ -1,5 +1,8 @@
 language: ruby
 script: 'bundle exec rake test:coverage --trace'
+before_install:
+- "export DISPLAY=:99.0"
+- "sh -e /etc/init.d/xvfb start"
 install:
   - bundle install --retry=3
 rvm:

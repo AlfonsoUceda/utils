@@ -1,0 +1,77 @@
+<!doctype HTML>
+<html>
+  <head>
+    <style>
+      #target { min-height: 300px; background-color: #f00; }
+    </style>
+    <script>
+      function xss( attackNumber ) {
+        var div = document.createElement('div');
+        div.innerHTML = "attack #" + attackNumber;
+
+        document.getElementById("target").appendChild(div);
+      };
+
+      function greet( name ) { };
+    </script>
+    <title>Stored XSS</title>
+  </head>
+    <%
+        def h(content)
+          Lotus::Utils::Escape.html(content)
+        end
+
+        def u(content)
+          Lotus::Utils::Escape.url(content)
+        end
+
+        # FIXME implement
+        def j(content)
+          # Lotus::Utils::Escape.javascript(content)
+          nil
+        end
+
+        attack1  = %(javascript:xss(1);)
+        attack2  = %(javascript:xss(2))
+        attack3  = %(JaVaScRiPt:xss(3))
+        attack4  = %(`javascript:xss(4)`)
+        attack5  = %(""><script>xss(5)</script>)
+        attack6  = %(><script>xss(6)</script>)
+        attack7  = %(# onmouseover="xss(7)" )
+        attack8  = %( onmouseover="xss(8)" )
+        attack9  = %(/" onerror="xss(9)">)
+        attack10 = %(/ onerror="xss(10)")
+        attack11 = %(&#x78;&#x73;&#x73;&#x28;&#x31;&#x31;&#x29;)
+        attack12 = %(&#120&#115&#115&#40&#49&#49&#41)
+        attack13 = %(jav\tascript:xss(13);)
+        attack14 = %(<<script>xss(14);//<</script>)
+        attack15 = %(javascript:xss(15))
+        attack16 = %(&{xss(16)})
+        attack17 = %(data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4K")
+        attack18 = "');xss(18);greet('Luca"
+        attack19 = "javascript:xss(19)"
+    %>
+
+  <body background="<%= attack15 %>">
+    <div id="target"></div>
+
+    <img src="<%= attack1 %>">
+    <img src=<%= attack2 %>>
+    <img src=<%= attack3 %>>
+    <img src=<%= attack4 %>>
+    <img src="<%=h attack5 %>">
+    <img src=<%=h attack6 %>>
+    <img src=<%=h attack7 %> id="attack7">
+    <img src=<%= attack8 %> id="attack8">
+    <img src="<%=h attack9 %>">
+    <img src=<%=h attack10 %>>
+    <img src="<%= attack11 %>">
+    <img src="<%= attack12 %>">
+    <img src="<%= attack13 %>">
+    <img src="<%= attack17 %>">
+    <%=h attack14 %>
+    <br size="<%= attack16 %>">
+    <a id="attack18" onmouseover="greet('<%=j attack18 %>');">attack 18</a>
+    <a href="<%=u attack19 %>" id="attack19">attack 19</a>
+  </body>
+</html>

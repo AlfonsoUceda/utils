@@ -1,0 +1,21 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title>Reflected XSS</title>
+    <style>
+      #target { min-height: 300px; background-color: #f00; }
+    </style>
+    <script>
+      function xss( attackNumber ) {
+        var div = document.createElement('div');
+        div.innerHTML = "attack #" + attackNumber;
+
+        document.getElementById("target").appendChild(div);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="target"></div>
+    <div id="attack"><%= Lotus::Utils::Escape.html(@params['q']) %></div>
+  </body>
+</html>

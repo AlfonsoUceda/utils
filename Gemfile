@@ -6,5 +6,8 @@ unless ENV['TRAVIS']
   gem 'yard',   require: false
 end
 
-gem 'simplecov', require: false
-gem 'coveralls', require: false
+gem 'simplecov',       require: false
+gem 'coveralls',       require: false
+gem 'rack',            require: false
+gem 'capybara',        require: false
+gem 'capybara-webkit', require: false
